@@ -35,7 +35,7 @@ start /BELOWNORMAL /WAIT /b ^
 	HandBrakeCLI.exe --title 1 --preset "Super HQ 576p25 Surround" --encoder x264 ^
 	--audio 1,2,3,4 --aencoder faac,faac,faac,faac ^
 	--subtitle 1,2,3,4,5,6,7,8,9,10,11,12,13,14 --markers --optimize ^
-	--input E:\ --output "The Hangover Part II (2011).mp4" & HandBrake-check-fail.bat && ^
+	--input E:\ --output "Some Movie (2048).mp4" & HandBrake-check-fail.bat && ^
 start powershell -Command "& {Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('Yoooooo all done here :P', 'HandBrakeCLI done', 'OK', [System.Windows.Forms.MessageBoxIcon]::Information);}"
 ```
 
@@ -50,9 +50,9 @@ Just add more lines for more titles.
 No "Super HQ" here because it takes forever, but feel free to tweak the preset.
 
 ```batch
-start /BELOWNORMAL /WAIT /b HandBrakeCLI.exe --title 3 --preset "HQ 576p25 Surround" --encoder x264 --audio 1,2 --aencoder faac,faac --subtitle 1,2,3,4,5 --markers --optimize --input E:\ --output "The Mentalist (2008) S07E21.mp4" & HandBrake-check-fail.bat && ^
-start /BELOWNORMAL /WAIT /b HandBrakeCLI.exe --title 4 --preset "HQ 576p25 Surround" --encoder x264 --audio 1,2 --aencoder faac,faac --subtitle 1,2,3,4,5 --markers --optimize --input E:\ --output "The Mentalist (2008) S07E22.mp4" & HandBrake-check-fail.bat && ^
-start /BELOWNORMAL /WAIT /b HandBrakeCLI.exe --title 5 --preset "HQ 576p25 Surround" --encoder x264 --audio 1,2 --aencoder faac,faac --subtitle 1,2,3,4,5 --markers --optimize --input E:\ --output "The Mentalist (2008) S07E23E24.mp4" & HandBrake-check-fail.bat && ^
+start /BELOWNORMAL /WAIT /b HandBrakeCLI.exe --title 3 --preset "HQ 576p25 Surround" --encoder x264 --audio 1,2 --aencoder faac,faac --subtitle 1,2,3,4,5 --markers --optimize --input E:\ --output "Some Show (2048) S07E21.mp4" & HandBrake-check-fail.bat && ^
+start /BELOWNORMAL /WAIT /b HandBrakeCLI.exe --title 4 --preset "HQ 576p25 Surround" --encoder x264 --audio 1,2 --aencoder faac,faac --subtitle 1,2,3,4,5 --markers --optimize --input E:\ --output "Some Show (2048) S07E22.mp4" & HandBrake-check-fail.bat && ^
+start /BELOWNORMAL /WAIT /b HandBrakeCLI.exe --title 5 --preset "HQ 576p25 Surround" --encoder x264 --audio 1,2 --aencoder faac,faac --subtitle 1,2,3,4,5 --markers --optimize --input E:\ --output "Some Show (2048) S07E23E24.mp4" & HandBrake-check-fail.bat && ^
 start powershell -Command "& {Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('Yoooooo all done here :P', 'HandBrakeCLI done', 'OK', [System.Windows.Forms.MessageBoxIcon]::Information);}"
 ```
 
@@ -65,9 +65,9 @@ Set the correct value for `-t` parameter (duration/length to copy).
 Obviously tweak file names.
 
 ```batch
-ffmpeg -i "The Mentalist (2008) S03E23E24.mp4" ^
-	-map 0 -c:s copy -vcodec copy -acodec copy -ss 00:00:00 -t 00:39:59 "The Mentalist (2008) S03E23.mp4" ^
-	-map 0 -c:s copy -vcodec copy -acodec copy -ss 00:39:59 "The Mentalist (2008) S03E24.mp4"
+ffmpeg -i "Some Show (2048) S03E23E24.mp4" ^
+	-map 0 -c:s copy -vcodec copy -acodec copy -ss 00:00:00 -t 00:39:59 "Some Show (2048) S03E23.mp4" ^
+	-map 0 -c:s copy -vcodec copy -acodec copy -ss 00:39:59 "Some Show (2048) S03E24.mp4"
 ```
 
 ## Change priority of running HandBrakeCLI instance
@@ -89,8 +89,8 @@ Other parameters are the same.
 ```batch
 start /BELOWNORMAL /WAIT /b HandBrakeCLI.exe --title 1 --preset "HQ 720p30 Surround" --encoder x264 ^
 	--audio 1,3,4,5,6 --aencoder faac,faac,faac,faac,faac ^
-	--markers --optimize --input "Spectre_t00.mkv" ^
-	--output "Spectre.mp4" & HandBrake-check-fail.bat && ^
+	--markers --optimize --input "Movie_t00.mkv" ^
+	--output "Movie.mp4" & HandBrake-check-fail.bat && ^
 start powershell -Command "& {Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('Yoooooo all done here :P', 'HandBrakeCLI done', 'OK', [System.Windows.Forms.MessageBoxIcon]::Information);}"
 ```
 
@@ -102,5 +102,5 @@ Specify correct audio (`a`) and video (`v`) streams in `-filter_complex`
 ```batch
 ffmpeg -i 1.mp4 -i 2.mp4 -i 3.mp4 ^
 	-filter_complex "[0:v] [0:a] [1:v] [1:a] [2:v] [2:a] concat=n=3:v=1:a=1 [v] [a]" ^
-	-map "[v]" -map "[a]" "Loriot (1976) S01E04.mkv"
+	-map "[v]" -map "[a]" "Another Movie (2048) S01E04.mkv"
 ```
