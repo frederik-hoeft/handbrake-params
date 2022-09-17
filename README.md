@@ -1,12 +1,15 @@
 # HandBrakeCLI
 
-hate reading through the man pages?
-just a collection of HandBrakeCLI commands :)
+This educational document describes *hypothetical* use cases of `HandBrakeCLI` and `ffmpeg` and **does not** endorse the actual usage of these tools for copyright infringing activities. Beware of the legal implications that apply to your country.
+
+---
+
+Hate reading through the man pages?
+Here's some examples of how these tools *could* be used :)
 
 ## Scan for titles
 
 ```batch
-rem scan
 HandBrakeCLI.exe --scan --title l -i E:\
 ```
 
@@ -28,7 +31,6 @@ where `E:\` is the DVD / BluRay drive.
 7. specify output file name
 
 ```batch
-rem rip dvd movie
 start /BELOWNORMAL /WAIT /b ^
 	HandBrakeCLI.exe --title 1 --preset "Super HQ 576p25 Surround" --encoder x264 ^
 	--audio 1,2,3,4 --aencoder faac,faac,faac,faac ^
@@ -48,7 +50,6 @@ Just add more lines for more titles.
 No "Super HQ" here because it takes forever, but feel free to tweak the preset.
 
 ```batch
-rem rip dvd TV show
 start /BELOWNORMAL /WAIT /b HandBrakeCLI.exe --title 3 --preset "HQ 576p25 Surround" --encoder x264 --audio 1,2 --aencoder faac,faac --subtitle 1,2,3,4,5 --markers --optimize --input E:\ --output "The Mentalist (2008) S07E21.mp4" & HandBrake-check-fail.bat && ^
 start /BELOWNORMAL /WAIT /b HandBrakeCLI.exe --title 4 --preset "HQ 576p25 Surround" --encoder x264 --audio 1,2 --aencoder faac,faac --subtitle 1,2,3,4,5 --markers --optimize --input E:\ --output "The Mentalist (2008) S07E22.mp4" & HandBrake-check-fail.bat && ^
 start /BELOWNORMAL /WAIT /b HandBrakeCLI.exe --title 5 --preset "HQ 576p25 Surround" --encoder x264 --audio 1,2 --aencoder faac,faac --subtitle 1,2,3,4,5 --markers --optimize --input E:\ --output "The Mentalist (2008) S07E23E24.mp4" & HandBrake-check-fail.bat && ^
@@ -58,13 +59,12 @@ start powershell -Command "& {Add-Type -AssemblyName System.Windows.Forms; [Syst
 ## Split a double episode into single parts
 
 This one uses `ffmpeg` :D
-Will split all audio tracks and preserve subtitles
-Be sure to use the correct time spans after the `-ss` start time stamp in input
+Will split all audio tracks and preserve subtitles.
+Be sure to use the correct time spans after the `-ss` start time stamp in input.
 Set the correct value for `-t` parameter (duration/length to copy).
 Obviously tweak file names.
 
 ```batch
-rem split video
 ffmpeg -i "The Mentalist (2008) S03E23E24.mp4" ^
 	-map 0 -c:s copy -vcodec copy -acodec copy -ss 00:00:00 -t 00:39:59 "The Mentalist (2008) S03E23.mp4" ^
 	-map 0 -c:s copy -vcodec copy -acodec copy -ss 00:39:59 "The Mentalist (2008) S03E24.mp4"
@@ -75,7 +75,6 @@ ffmpeg -i "The Mentalist (2008) S03E23E24.mp4" ^
 ... because finding it in the task manager can be a pain...
 
 ```batch
-rem decrease priority
 wmic process where name="HandBrakeCLI.exe" CALL setpriority "below normal"
 ```
 
@@ -83,13 +82,11 @@ wmic process where name="HandBrakeCLI.exe" CALL setpriority "below normal"
 
 `HQ 720p30 Surround` is fine enough, takes forever to encode to `Super HQ 720p30 Surround` or even `HQ 1080p60 Surround`.
 
-Also BluRay subtitles can't be preserved (tho a single subtitle could be burnt in), cause BD subs are image-based (incompatible with mp4).
+Also BluRay subtitles can't be preserved (tho a single subtitle could be burnt in), cause BD subs are image-based (incompatible with soft subtitles in mp4).
 
 Other parameters are the same.
 
 ```batch
-rem TRANSCODE MKV to mpeg
-rem can't preserve soft subtitles for BluRay (would be burnt in)
 start /BELOWNORMAL /WAIT /b HandBrakeCLI.exe --title 1 --preset "HQ 720p30 Surround" --encoder x264 ^
 	--audio 1,3,4,5,6 --aencoder faac,faac,faac,faac,faac ^
 	--markers --optimize --input "Spectre_t00.mkv" ^
@@ -103,7 +100,6 @@ It's `ffmpeg` so more parameters to tweak here.
 Specify correct audio (`a`) and video (`v`) streams in `-filter_complex`
 
 ```batch
-rem concat mp4 to MKV
 ffmpeg -i 1.mp4 -i 2.mp4 -i 3.mp4 ^
 	-filter_complex "[0:v] [0:a] [1:v] [1:a] [2:v] [2:a] concat=n=3:v=1:a=1 [v] [a]" ^
 	-map "[v]" -map "[a]" "Loriot (1976) S01E04.mkv"
