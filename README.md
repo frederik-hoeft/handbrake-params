@@ -104,3 +104,21 @@ ffmpeg -i 1.mp4 -i 2.mp4 -i 3.mp4 ^
 	-filter_complex "[0:v] [0:a] [1:v] [1:a] [2:v] [2:a] concat=n=3:v=1:a=1 [v] [a]" ^
 	-map "[v]" -map "[a]" "Another Movie (2048) S01E04.mkv"
 ```
+
+## Setting processor affinity
+
+If you want to use your computer for other resource intensive things (where *below normal* priority isn't enough) you may want to set a specific processor affinity for HandBrake:
+
+### ...via `start` arguments:
+
+```batch
+start /BELOWNORMAL /AFFINITY FC /WAIT /b HandBrakeCLI.exe ...
+```
+
+where `0xFC` is `1111 1100` in binary and uses all but processor cores 0 and 1 on an 8-core system. Leaving core 0 and 1 to do other things.
+
+### ...of a running instance:
+
+```batch
+powershell "$(Get-Process HandBrakeCLI).ProcessorAffinity=252"
+```
